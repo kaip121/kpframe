@@ -3,6 +3,8 @@ package com.kplike.library.util;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.kplike.library.base.BaseApplication;
+
 public class ToastUtil {
 	public static void showLongMsg(Context context, String msg){
 		if (null == context) return;
@@ -22,5 +24,9 @@ public class ToastUtil {
 	public static void show(Context context, String msg){
 		if (null == context) return;
 		Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+	}
+
+	public static void show(String msg){
+		Toast.makeText(BaseApplication.context(), msg, Toast.LENGTH_SHORT).show();
 	}
 }
