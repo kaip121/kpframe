@@ -14,19 +14,26 @@ import com.kplike.library.base.BaseApplication;
  * @author nowy
  *
  */
-public class PreferenceUtils extends SingletonUtils<PreferenceUtils>{
+public class PreferenceUtils {
 
 	private Context mContext;
 	private SharedPreferences sharedpreferences;
 	private Editor editor;
+	private static PreferenceUtils instance;
 
-	@Override
-	public PreferenceUtils newInstance() {
-		return new PreferenceUtils(BaseApplication.context());
+	public static PreferenceUtils getInstance() {
+		if (instance == null) {
+			synchronized (PreferenceUtils.class) {
+				if (instance == null) {
+					instance = new PreferenceUtils();
+				}
+			}
+		}
+		return instance;
 	}
 
-	private PreferenceUtils(Context context){
-		this.mContext = context;
+	private PreferenceUtils(){
+		this.mContext = BaseApplication.context();
 		sharedpreferences = mContext.getSharedPreferences("utils",
 				Context.MODE_PRIVATE);
 		editor = sharedpreferences.edit();
