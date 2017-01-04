@@ -110,5 +110,4 @@ public class PreferenceUtils extends SingletonUtils<PreferenceUtils>{
 		return sharedpreferences.getLong(key, defaultValue);
 	}
 
-
 }
