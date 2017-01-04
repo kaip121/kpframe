@@ -21,7 +21,7 @@ public class PreferenceUtils extends SingletonUtils<PreferenceUtils>{
 	private Editor editor;
 
 	@Override
-	protected PreferenceUtils newInstance() {
+	public PreferenceUtils newInstance() {
 		return new PreferenceUtils(BaseApplication.context());
 	}
 
