@@ -1,175 +1,114 @@
 package com.kplike.library.util;
 
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Build;
-import android.preference.PreferenceManager;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import com.google.gson.Gson;
+import com.kplike.library.base.BaseApplication;
 
 /**
  * preference工具类
- * 使用默认路径，存放在项目所在目录底下
+ * 使用utils路径，存放在项目所在目录底下
  * @author nowy
  *
  */
-public class PreferenceUtils {
+public class PreferenceUtils extends SingletonUtils<PreferenceUtils>{
 
-	public static String getPrefString(Context context, String key,
-			final String defaultValue) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return settings.getString(key, defaultValue);
-	}
+	private Context mContext;
+	private SharedPreferences sharedpreferences;
+	private Editor editor;
 
-	public static void setPrefString(Context context, final String key,
-			final String value) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		settings.edit().putString(key, value).commit();
+	@Override
+	protected PreferenceUtils newInstance() {
+		return new PreferenceUtils(BaseApplication.context());
 	}
 
-	public static boolean getPrefBoolean(Context context, final String key,
-			final boolean defaultValue) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return settings.getBoolean(key, defaultValue);
+	private PreferenceUtils(Context context){
+		this.mContext = context;
+		sharedpreferences = mContext.getSharedPreferences("utils",
+				Context.MODE_PRIVATE);
+		editor = sharedpreferences.edit();
 	}
 
-	public static boolean hasKey(Context context, final String key) {
-		return PreferenceManager.getDefaultSharedPreferences(context).contains(
-				key);
-	}
-
-	public static void setPrefBoolean(Context context, final String key,
-			final boolean value) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		settings.edit().putBoolean(key, value).commit();
-	}
-
-	public static void setPrefInt(Context context, final String key,
-			final int value) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		settings.edit().putInt(key, value).commit();
-	}
-
-	public static int getPrefInt(Context context, final String key,
-			final int defaultValue) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return settings.getInt(key, defaultValue);
-	}
-
-	public static void setPrefFloat(Context context, final String key,
-			final float value) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		settings.edit().putFloat(key, value).commit();
-	}
-
-	public static float getPrefFloat(Context context, final String key,
-			final float defaultValue) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return settings.getFloat(key, defaultValue);
-	}
-
-	public static void setPreffLong(Context context, final String key,
-			final long value) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		settings.edit().putLong(key, value).commit();
-	}
-
-	public static long getPrefLong(Context context, final String key,
-			final long defaultValue) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return settings.getLong(key, defaultValue);
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public static void setPrefSet(Context context, final String key,
-			Set<String> values){
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		settings.edit().putStringSet(key, values).commit();
-	}
-	
-	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public static Set<String> getPrefSet(Context context, final String key,
-			final Set<String> defaultValue){
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return settings.getStringSet(key, defaultValue);
-	}
-	
-	
-	//保存set进sp
-	public static void setPrefSet(Context context,String keySize, final String key,
-			Set<String> values) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		 if(values==null||values.size()<=0) return ;
-		 Editor editor=settings.edit();
-		 editor.putInt(keySize, values.size());
-		  Iterator<String> it=values.iterator();
-		  int i=0;
-	       while(it.hasNext())
-	       {
-	           String v=it.next();
-	           String _key=key + i;
-	           editor.remove(_key);
-	           editor.putString(_key, v); 
-	           i++;
-	       }
-	       editor.commit();
-	}
-	
-	
-	
-	//获取set数据
-	public static Set<String> getPrefSet(Context context,String keySize,String key,String defaultValue) {  
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-	    int size = settings.getInt(keySize, 0);  
-	    if(size>0){
-	    	Set<String> values=new HashSet<String>();
-		    for(int i=0;i<size;i++) {
-		        values.add(settings.getString(key+i, defaultValue));
-		    }
-		    
-		    return values;
-	    }
-	    return null;
-	}
-	
-	public static void clearPreference(Context context,
-			final SharedPreferences p) {
-		final Editor editor = p.edit();
-		editor.clear();
+	public void remove(String key){
+		editor.remove(key);
 		editor.commit();
 	}
-	
-	public static void clearPreference(Context context) {
-		final SharedPreferences settings =PreferenceManager
-		.getDefaultSharedPreferences(context);
-		final Editor editor = settings.edit();
+
+	public void clear(){
 		editor.clear();
 		editor.commit();
 	}
 
-	public static void removePrefLong(Context context, final String key) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		settings.edit().remove(key).commit();
+	public <T> T getObject(String key,Class<T> cls){
+		String value = getString(key);
+		if (value == null) {
+			return null;
+		}
+		Gson gson = new Gson();
+		try {
+			return gson.fromJson(value, cls);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
+
+	public void putObject(String key,Object obj){
+		if (obj == null) {
+			putString(key, "");
+			return;
+		}
+		Gson gson = new Gson();
+		String json = gson.toJson(obj);
+		putString(key, json);
+	}
+
+	public void putString(String key,String value){
+		editor.putString(key, value);
+		editor.commit();
+	}
+
+	public String getString(String key){
+		return sharedpreferences.getString(key, null);
+	}
+
+	public void putInt(String key,int value){
+		editor.putInt(key, value);
+		editor.commit();
+	}
+
+	public int getInt(String key){
+		return sharedpreferences.getInt(key, 0);
+	}
+
+	public int getInt(String key,int defaultValue){
+		return sharedpreferences.getInt(key, defaultValue);
+	}
+
+	public void putBoolean(String key,boolean value){
+		editor.putBoolean(key, value);
+		editor.commit();
+	}
+
+	public boolean getBoolean(String key){
+		return sharedpreferences.getBoolean(key, false);
+	}
+
+	public boolean getBoolean(String key,boolean defaulValue){
+		return sharedpreferences.getBoolean(key, defaulValue);
+	}
+
+	public void putLong(String key,long value){
+		editor.putLong(key, value);
+		editor.commit();
+	}
+
+	public long getLong(String key,long defaultValue){
+		return sharedpreferences.getLong(key, defaultValue);
+	}
+
+
 }

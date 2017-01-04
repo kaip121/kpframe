@@ -20,7 +20,6 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewConfiguration;

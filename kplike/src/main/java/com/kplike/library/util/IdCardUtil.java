@@ -91,7 +91,7 @@ public class IdCardUtil {
         twFirstCode.put("H", 17);
         twFirstCode.put("J", 18);
         twFirstCode.put("K", 19);
-        twFirstCode.put("L", 20);
+        twFirstCode.put("TLog", 20);
         twFirstCode.put("M", 21);
         twFirstCode.put("N", 22);
         twFirstCode.put("P", 23);
