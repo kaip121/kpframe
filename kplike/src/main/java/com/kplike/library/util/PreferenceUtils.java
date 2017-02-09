@@ -82,6 +82,10 @@ public class PreferenceUtils {
 		return sharedpreferences.getString(key, null);
 	}
 
+	public String getString(String key, String str){
+		return sharedpreferences.getString(key, str);
+	}
+
 	public void putInt(String key,int value){
 		editor.putInt(key, value);
 		editor.commit();
