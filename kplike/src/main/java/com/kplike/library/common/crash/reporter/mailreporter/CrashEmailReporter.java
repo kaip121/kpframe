@@ -3,9 +3,10 @@ package com.kplike.library.common.crash.reporter.mailreporter;
 
 import android.content.Context;
 
+import com.kplike.library.common.crash.reporter.AbstractCrashHandler;
+
 import java.io.File;
 
-import cn.com.do1.mmyy.common.crash.reporter.AbstractCrashHandler;
 
 
 /**
