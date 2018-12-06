@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import com.google.gson.Gson;
-import com.kplike.library.base.BaseApplication;
+import com.kplike.library.base.KpFrame;
 
 /**
  * preference工具类
@@ -33,7 +33,7 @@ public class PreferenceUtils {
 	}
 
 	private PreferenceUtils(){
-		this.mContext = BaseApplication.context();
+		this.mContext = KpFrame.context();
 		sharedpreferences = mContext.getSharedPreferences("utils",
 				Context.MODE_PRIVATE);
 		editor = sharedpreferences.edit();

@@ -3,7 +3,7 @@ package com.kplike.library.util;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.kplike.library.base.BaseApplication;
+import com.kplike.library.base.KpFrame;
 
 public class ToastUtil {
 	public static void showLongMsg(Context context, String msg){
@@ -27,6 +27,6 @@ public class ToastUtil {
 	}
 
 	public static void show(String msg){
-		Toast.makeText(BaseApplication.context(), msg, Toast.LENGTH_SHORT).show();
+		Toast.makeText(KpFrame.context(), msg, Toast.LENGTH_SHORT).show();
 	}
 }

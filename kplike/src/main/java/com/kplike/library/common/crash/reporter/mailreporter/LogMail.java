@@ -22,7 +22,9 @@ package com.kplike.library.common.crash.reporter.mailreporter;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.activation.CommandMap;
@@ -49,7 +51,7 @@ public class LogMail extends Authenticator {
     private String user;
     private String pass;
     private String from;
-    private String to;
+    private String[] to;
     private String subject;
     private String body;
 
@@ -77,7 +79,7 @@ public class LogMail extends Authenticator {
      * @param body
      *            邮件正文
      */
-    public LogMail(String user, String pass, String from, String to, String host, String port,
+    public LogMail(String user, String pass, String from, String[] to, String host, String port,
             String subject, String body) {
         this.host = host;
         this.port = port;
@@ -114,7 +116,7 @@ public class LogMail extends Authenticator {
         return this;
     }
 
-    public LogMail setTo(String to) {
+    public LogMail setTo(String... to) {
         this.to = to;
         return this;
     }
@@ -162,7 +164,7 @@ public class LogMail extends Authenticator {
      * @throws MessagingException
      */
     public boolean send() throws MessagingException {
-        if (!user.equals("") && !pass.equals("") && !to.equals("") && !from.equals("")) {
+        if (!user.equals("") && !pass.equals("") && to!=null&&to.length>0 && !from.equals("")) {
             Session session = Session.getDefaultInstance(props, this);
             Log.d("SendUtil", host + "..." + port + ".." + user + "..." + pass);
 
@@ -170,8 +172,17 @@ public class LogMail extends Authenticator {
 
             msg.setFrom(new InternetAddress(from));
 
-            InternetAddress addressTo = new InternetAddress(to);
-            msg.setRecipient(MimeMessage.RecipientType.TO, addressTo);
+            if (to.length>1){//群发
+                List<InternetAddress> addressList = new ArrayList<>();
+                for(String addr : to){
+                    InternetAddress addressTo = new InternetAddress(addr);
+                    addressList.add(addressTo);
+                }
+                msg.setRecipients(MimeMessage.RecipientType.TO, addressList.toArray(new InternetAddress[]{}));
+            } else {
+                InternetAddress addressTo = new InternetAddress(to[0]);
+                msg.setRecipient(MimeMessage.RecipientType.TO, addressTo);
+            }
 
             msg.setSubject(subject);
             msg.setSentDate(new Date());

@@ -17,6 +17,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         _context = getApplicationContext();
         _resource = _context.getResources();
+        KpFrame.init(this);
     }
 
     public static synchronized BaseApplication context() {

@@ -27,7 +27,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.kplike.library.base.BaseApplication;
+import com.kplike.library.base.KpFrame;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -68,7 +68,7 @@ public class TDevice {
 
     public static int getDefaultLoadFactor() {
         if (_loadFactor == null) {
-            Integer integer = Integer.valueOf(0xf & BaseApplication.context()
+            Integer integer = Integer.valueOf(0xf & KpFrame.context()
                     .getResources().getConfiguration().screenLayout);
             _loadFactor = integer;
             _loadFactor = Integer.valueOf(Math.max(integer.intValue(), 1));
@@ -84,7 +84,7 @@ public class TDevice {
 
     public static DisplayMetrics getDisplayMetrics() {
         DisplayMetrics displaymetrics = new DisplayMetrics();
-        ((WindowManager) BaseApplication.context().getSystemService(
+        ((WindowManager) KpFrame.context().getSystemService(
                 Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(
                 displaymetrics);
         return displaymetrics;
@@ -142,7 +142,7 @@ public class TDevice {
             obj = c.newInstance();
             field = c.getField("status_bar_height");
             x = Integer.parseInt(field.get(obj).toString());
-            return BaseApplication.context().getResources()
+            return KpFrame.context().getResources()
                     .getDimensionPixelSize(x);
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,7 +154,7 @@ public class TDevice {
         boolean flag = true;
         if (_hasBigScreen == null) {
             boolean flag1;
-            if ((0xf & BaseApplication.context().getResources()
+            if ((0xf & KpFrame.context().getResources()
                     .getConfiguration().screenLayout) >= 3)
                 flag1 = flag;
             else
@@ -172,7 +172,7 @@ public class TDevice {
 
     public static final boolean hasCamera() {
         if (_hasCamera == null) {
-            PackageManager pckMgr = BaseApplication.context()
+            PackageManager pckMgr = KpFrame.context()
                     .getPackageManager();
             boolean flag = pckMgr
                     .hasSystemFeature("android.hardware.camera.front");
@@ -200,7 +200,7 @@ public class TDevice {
 
     public static boolean hasInternet() {
         boolean flag;
-        if (((ConnectivityManager) BaseApplication.context().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
+        if (((ConnectivityManager) KpFrame.context().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null) {
             flag = true;
         } else
             flag = false;
@@ -223,7 +223,7 @@ public class TDevice {
 
     public static boolean isPackageExist(String pckName) {
         try {
-            PackageInfo pckInfo = BaseApplication.context().getPackageManager()
+            PackageInfo pckInfo = KpFrame.context().getPackageManager()
                     .getPackageInfo(pckName, 0);
             if (pckInfo != null)
                 return true;
@@ -241,14 +241,14 @@ public class TDevice {
     public static void hideSoftKeyboard(View view) {
         if (view == null)
             return;
-        ((InputMethodManager) BaseApplication.context().getSystemService(
+        ((InputMethodManager) KpFrame.context().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                 view.getWindowToken(), 0);
     }
 
     public static boolean isLandscape() {
         boolean flag;
-        if (BaseApplication.context().getResources().getConfiguration().orientation == 2)
+        if (KpFrame.context().getResources().getConfiguration().orientation == 2)
             flag = true;
         else
             flag = false;
@@ -257,7 +257,7 @@ public class TDevice {
 
     public static boolean isPortrait() {
         boolean flag = true;
-        if (BaseApplication.context().getResources().getConfiguration().orientation != 1)
+        if (KpFrame.context().getResources().getConfiguration().orientation != 1)
             flag = false;
         return flag;
     }
@@ -265,7 +265,7 @@ public class TDevice {
     public static boolean isTablet() {
         if (_isTablet == null) {
             boolean flag;
-            if ((0xf & BaseApplication.context().getResources()
+            if ((0xf & KpFrame.context().getResources()
                     .getConfiguration().screenLayout) >= 3)
                 flag = true;
             else
@@ -289,13 +289,13 @@ public class TDevice {
     }
 
     public static void showSoftKeyboard(View view) {
-        ((InputMethodManager) BaseApplication.context().getSystemService(
+        ((InputMethodManager) KpFrame.context().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).showSoftInput(view,
                 InputMethodManager.SHOW_FORCED);
     }
 
     public static void toogleSoftKeyboard(View view) {
-        ((InputMethodManager) BaseApplication.context().getSystemService(
+        ((InputMethodManager) KpFrame.context().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
@@ -306,15 +306,15 @@ public class TDevice {
     }
 
     public static String getCurCountryLan() {
-        return BaseApplication.context().getResources().getConfiguration().locale
+        return KpFrame.context().getResources().getConfiguration().locale
                 .getLanguage()
                 + "-"
-                + BaseApplication.context().getResources().getConfiguration().locale
+                + KpFrame.context().getResources().getConfiguration().locale
                 .getCountry();
     }
 
     public static boolean isZhCN() {
-        String lang = BaseApplication.context().getResources()
+        String lang = KpFrame.context().getResources()
                 .getConfiguration().locale.getCountry();
         if (lang.equalsIgnoreCase("CN")) {
             return true;
@@ -401,7 +401,7 @@ public class TDevice {
 
     public static PackageInfo getPackageInfo(String pckName) {
         try {
-            return BaseApplication.context().getPackageManager()
+            return KpFrame.context().getPackageManager()
                     .getPackageInfo(pckName, 0);
         } catch (NameNotFoundException e) {
             TLog.error(e.getMessage());
@@ -412,10 +412,10 @@ public class TDevice {
     public static int getVersionCode() {
         int versionCode = 0;
         try {
-            versionCode = BaseApplication
+            versionCode = KpFrame
                     .context()
                     .getPackageManager()
-                    .getPackageInfo(BaseApplication.context().getPackageName(),
+                    .getPackageInfo(KpFrame.context().getPackageName(),
                             0).versionCode;
         } catch (NameNotFoundException ex) {
             versionCode = 0;
@@ -426,7 +426,7 @@ public class TDevice {
     public static int getVersionCode(String packageName) {
         int versionCode = 0;
         try {
-            versionCode = BaseApplication.context().getPackageManager()
+            versionCode = KpFrame.context().getPackageManager()
                     .getPackageInfo(packageName, 0).versionCode;
         } catch (NameNotFoundException ex) {
             versionCode = 0;
@@ -437,10 +437,10 @@ public class TDevice {
     public static String getVersionName() {
         String name = "";
         try {
-            name = BaseApplication
+            name = KpFrame
                     .context()
                     .getPackageManager()
-                    .getPackageInfo(BaseApplication.context().getPackageName(),
+                    .getPackageInfo(KpFrame.context().getPackageName(),
                             0).versionName;
         } catch (NameNotFoundException ex) {
             name = "";
@@ -449,7 +449,7 @@ public class TDevice {
     }
 
     public static boolean isScreenOn() {
-        PowerManager pm = (PowerManager) BaseApplication.context()
+        PowerManager pm = (PowerManager) KpFrame.context()
                 .getSystemService(Context.POWER_SERVICE);
         return pm.isScreenOn();
     }
@@ -508,7 +508,7 @@ public class TDevice {
     }
 
     public static String getIMEI() {
-        TelephonyManager tel = (TelephonyManager) BaseApplication.context()
+        TelephonyManager tel = (TelephonyManager) KpFrame.context()
                 .getSystemService(Context.TELEPHONY_SERVICE);
         return tel.getDeviceId();
     }
@@ -518,7 +518,7 @@ public class TDevice {
     }
 
     public static void openApp(Context context, String packageName) {
-        Intent mainIntent = BaseApplication.context().getPackageManager()
+        Intent mainIntent = KpFrame.context().getPackageManager()
                 .getLaunchIntentForPackage(packageName);
         if (mainIntent == null) {
             mainIntent = new Intent(packageName);
@@ -544,7 +544,7 @@ public class TDevice {
 
     public static boolean isWifiOpen() {
         boolean isWifiConnect = false;
-        ConnectivityManager cm = (ConnectivityManager) BaseApplication
+        ConnectivityManager cm = (ConnectivityManager) KpFrame
                 .context().getSystemService(Context.CONNECTIVITY_SERVICE);
         // check the networkInfos numbers
         NetworkInfo[] networkInfos = cm.getAllNetworkInfo();
@@ -604,7 +604,7 @@ public class TDevice {
             obj = c.newInstance();
             field = c.getField("status_bar_height");
             x = Integer.parseInt(field.get(obj).toString());
-            sbar = BaseApplication.context().getResources()
+            sbar = KpFrame.context().getResources()
                     .getDimensionPixelSize(x);
 
         } catch (Exception e1) {
@@ -645,7 +645,7 @@ public class TDevice {
      */
     public static int getNetworkType() {
         int netType = 0;
-        ConnectivityManager connectivityManager = (ConnectivityManager) BaseApplication.context()
+        ConnectivityManager connectivityManager = (ConnectivityManager) KpFrame.context()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null) {

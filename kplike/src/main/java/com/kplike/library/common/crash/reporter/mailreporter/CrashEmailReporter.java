@@ -14,7 +14,7 @@ import java.io.File;
  *
  */
 public class CrashEmailReporter extends AbstractCrashHandler {
-    private String mReceiveEmail;
+    private String[] mReceiveEmail;
     private String mSendEmail;
     private String mSendPassword;
     private String mHost;
@@ -29,7 +29,7 @@ public class CrashEmailReporter extends AbstractCrashHandler {
      * 
      * @param receiveEmail
      */
-    public void setReceiver(String receiveEmail) {
+    public void setReceiver(String... receiveEmail) {
         mReceiveEmail = receiveEmail;
     }
 

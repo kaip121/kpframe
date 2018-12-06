@@ -49,7 +49,6 @@ public class AndroidCrash {
         }
         File logFile = getLogFile(mContext, mLogName);
         if (logFile.exists()){
-            Log.e("TAG", "====OK");
             mReporter.sendFile(logFile);
         }
         CrashCatcher.getInstance().init(logFile, mReporter);
